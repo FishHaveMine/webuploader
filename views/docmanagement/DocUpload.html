@@ -1,0 +1,38 @@
+<style>
+    .col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-8,.col-md-10,.col-md-12{padding-left: 0;}
+</style>
+<div>
+    <div class="clearfix col-m-l marginLeft0">
+        <div class="form col-md-8 paddingLeft0">        
+
+            <div class="form-group">
+                <label>文档资料</label>
+                <div ng-if="message.attachments.length > 0">
+                    <table class="table table-striped" ng-class="{ marginBottom0: attachLength > 0 }">
+                        <tr ng-repeat="file in message.attachments track by file.attachId">
+                            <td class="hide"></td>
+                            <td class="col-md-5 text-left"><a ng-href="restful/fileUploadController/downFile?fileId={{ file.attachId }}">{{ file.attachName }}</a></td>
+                            <td class="col-md-2 text-left">{{ file.attachSize | byte }}</td>
+                            <td class="col-md-5"></td>
+                            <td class="cs-btn-cell"><a href ng-click="removeAttach(file)" class="close">&times;</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-12  thumbnail">
+					<div data-tabset class="tab-content" style="margin-top: 10px">						
+		                <div data-tab  data-heading="上传附件" style="cursor: pointer;">
+		                    <div fc-upload="ccalice/docsUpload" uploader-option="uploaderOption" limit-Type="typelist" dnd-info="拖放到这里上传附件（每个文件大小50M以下）"></div>
+		                </div>
+					</div>
+				</div>
+            </div>
+	      
+ 	<div class="form-group text-right">
+                <button data-ng-click="save()" class="btn btn-primary">保存</button>
+                <button data-ng-click="cancel()" class="btn btn-default">返回</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,144 @@
+<style>
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+.fancy-scrollbar::-webkit-scrollbar  
+{  
+    width: 5px;  
+    height: 5px;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+.fancy-scrollbar::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+    border-radius: 10px;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+.fancy-scrollbar::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+    background-color: #555;  
+}  
+</style>
+<div class="container ng-scope" style="margin-left: 0;padding-left: 0;">
+	<div class="row" style="padding-left: 12px;">	
+    	<button class="btn btn-primary" style="padding: 5px 20px;font-size: 15px;margin: 5px 0px;" data-ng-click="addDocMenu(1)">新增一级</button>
+    	<button class="btn btn-primary btn-duration" style="padding: 5px 20px;font-size: 15px;margin: 5px 30px;" data-ng-click="addDocMenu(2)"  ng-disabled="docIndex_List.length == 0">新增二级</button>
+    	<button class="btn btn-primary" style="padding: 5px 20px;font-size: 15px;margin: 5px 0px;" data-ng-click="addFileItem()">新增文档</button>
+    </div>
+    <div class="row" style="padding-left: 12px;">
+        <div class="col-md-3" style="float: left;padding-top: 9px;padding-left: 0;">
+          
+
+		<div class="col-lg-12 orgUserPicker-pickArea fancy-scrollbar" style="overflow-y: auto; overflow-x: hidden;width: 275px;">
+            <div class="org-sel-users" data-ng-hide="noneResult" data-ng-show="docIndex_List.length != 0">
+                <ul class="docIndex_List" style="padding:10px 0;">
+                    <li class="docIndex_List_Item"  data-ng-repeat="Item in docIndex_List" ng-class="{showNext : showItemId == Item.menueId || showItemPmenueId == Item.menueId, theLowest : !Item.haveChild , haveChild : Item.haveChild, isClose : showItemPmenueId != Item.menueId || !tiggerShow}">
+               			<span ng-class="{haveThe_Next : Item.haveChild,witheFont: showItemId == Item.menueId}" style="width: 245px;display: block;"  ng-click="setShowItemId(Item,0)">{{Item.menueName}}</span>
+               			
+               					<div class="theLowest_Btn itermText_Center" ng-class = "{haveChild_Btn : Item.haveChild}">
+		               			  	<a data-ng-click="editMenuTtem(Item)" title="编辑" class="itermText_Center" style="height: 28px;width: 28px;background-color:#00483a;">
+					                    <img data-ng-src="images/common/edit.png" src="images/common/edit.png" class="">
+					                </a>
+					                <a data-ng-click="deleteMenuTtem(Item)" title="删除" class="itermText_Center" style="height: 28px;width: 28px;background-color:#bf4d4d;">
+					                    <img data-ng-src="images/common/close.png" src="images/common/close.png" class="">
+					                </a>   
+	               			  	</div>
+	               		<div class="docIndex_List_NextBox" style="width: 275px;margin-left: -15px;padding: 0 15px;">
+	               		
+	               		<ul class="docIndex_List docIndex_List_Next" data-ng-show = "(showItemId == Item.menueId || showItemPmenueId == Item.menueId)&&tiggerShow">
+               			   <li class="docIndex_List_Item theLowest" data-ng-repeat="childItem in Item.childMenues" ng-class="{showNext : showItemId == childItem.menueId}"  ng-click="setShowItemId(childItem,0)">
+               			  	<span  ng-class="{witheFont : showItemId == childItem.menueId}">{{childItem.menueName}}</span> 
+	               			  	<div class="theLowest_Btn itermText_Center">
+		               			  	<a data-ng-click="editMenuTtem(childItem)" title="编辑" class="itermText_Center" style="height: 28px;width: 28px;background-color:#00483a;">
+					                    <img data-ng-src="images/common/edit.png" src="images/common/edit.png" class="">
+					                </a>
+					                <a data-ng-click="deleteMenuTtem(childItem)" title="删除" class="itermText_Center" style="height: 28px;width: 28px;background-color:#bf4d4d;">
+					                    <img data-ng-src="images/common/close.png" src="images/common/close.png" class="">
+					                </a>   
+	               			  	</div>
+               			   </li>
+               			 </ul>
+               			 
+	               		</div>  	
+					</li>
+                </ul>
+            </div>
+            <div data-ng-show="docIndex_List.length == 0" style="text-align: center;margin-top: 100px;font-size: 15px;font-weight: bold;" class="ng-hide">
+            	    暂无文档分级
+            </div>
+        </div>
+        
+        </div>
+           
+
+      
+	    <div class="col-md-8" style="float: left; width:875px; padding-top: 9px;padding-left: 0;">
+	      
+            <div class="col-md-12 projectlist" style="padding-left:0;">
+                <table class="table table-bordered table-striped table-hover" style="text-align:center;width:860px;margin-bottom:10px;">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;width:40%;">文档名称</th>
+                        <th style="text-align: center;width:10%;">类型</th>
+                        <th style="text-align: center;width:10%;">大小</th>
+                        <th style="text-align: center;width:15%;">上传时间</th>
+                        <th style="text-align: center;width:10%;">上传人</th>
+                        <th style="text-align: center;width:10%;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+	                  	<tr class="hand" style="text-align:center;"  data-ng-repeat="docItem in docItemList">
+	                    	<td>
+	                    	    <a href="restful/ccalice/downDocFile?docId={{docItem.docId}}" title="{{docItem.fileName}}">
+	                    		{{docItem.fileName}}</a>
+	                    	</td>
+	                    	<td>{{docItem.fileType}}</td>
+	                       	<td>
+	                       		<span data-ng-if="docItem.fileSize>=1048576">{{docItem.fileSize/1048576|number:2}}MB</span>
+	                       		<span data-ng-if="docItem.fileSize<1048576">{{docItem.fileSize/1024|number:0}}KB</span>
+	                       	</td>
+	                       	<td>2018-03-20</td>
+	                       	<td>{{docItem.userName}}</td>
+	                       	<td>
+	                       		<!-- <a data-ng-click="downProjectItem(docItem)" title="编辑"  style="cursor: pointer;">
+				                    	编辑
+				                </a> -->
+				                <a data-ng-click="deleteDocItem(docItem)" title="删除"  style="cursor: pointer;padding-left:10px;color:red;" >
+				                    	删除
+				                </a>   
+	                       	</td>
+	                    </tr>  
+                    </tbody>
+                </table>
+
+            </div>
+            <div class=" panel-default ng-cloak ng-table-pager" style="clear:both;padding-left:0px;margin-top:-30px;height:50px;max-width: 1200px;">	
+        		<div class="ng-table-counts btn-group pull-right" style="padding-left:30px;">
+					<span>每页显示</span> 
+					
+				   <select ng-model="pageSize" id="itemType"  ng-change="setpageSize()" style="width: 110px; padding: 5px;height: 35px;">
+						<option ng-repeat="x in pageSizeList"  ng-selected="x == pageSize">{{x}}</option>
+				   </select> 
+				   
+					<span>条数据</span>
+				</div>	
+				<div data-ng-if="pages.length" class="ng-table-counts btn-group pull-right">
+					<ul class="pagination ng-table-pagination" style="margin-top:0px;">
+						<li data-ng-class="{'active': !page.active && page.type != 'more' }" data-ng-repeat="page in pages" data-ng-switch="page.type">
+							<a data-ng-switch-when="prev" data-ng-click="gotoPage(page.number)" href=""> &laquo; </a> 
+							<a data-ng-switch-when="first" data-ng-click="gotoPage(page.number)" href=""><span data-ng-bind="page.number"></span></a> 
+							<a data-ng-switch-when="page" data-ng-click="gotoPage(page.number)" href=""><span data-ng-bind="page.number"></span></a> 
+							<a data-ng-switch-when="more" href="">&#8230;</a> 
+							<a data-ng-switch-when="last" data-ng-click="gotoPage(page.number)" href=""><span data-ng-bind="page.number"></span></a> 
+							<a data-ng-switch-when="next" data-ng-click="gotoPage(page.number)" href=""> &raquo; </a></li>
+					</ul>
+				</div>
+				
+            </div>    
+	    </div>
+    </div>
+</div>

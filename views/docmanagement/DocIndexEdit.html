@@ -1,0 +1,62 @@
+<style>
+.menueName{border: 1px solid #ccc;width:93%;padding: 5px;border-radius: 5px;}
+.menueName.isExit{border-color:red;}
+</style>
+<div class="panel panel-default" style="margin-bottom: 0px;">
+    <div class="panel-heading clearfix" style="background: #fff;border: none;">
+	    <span class="panel-title col-md-8 title" data-ng-show="weatherCreate">
+	        	新增{{title}}级
+	    </span>
+	    <span class="panel-title col-md-8 title" data-ng-show="!weatherCreate">
+	        	修改分类
+	    </span>
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+				×
+		</button>
+    </div>
+
+   	<div style="margin-top: 10px">
+   		<div class="panel-body form-horizontal" style="padding-right: 30px;" data-ng-show="addlevel == 1 || !weatherCreate">
+			<div class="editItem">
+				<input type="text" id="menueName" class="menueName" data-ng-model="menueName" placeholder="请输入菜单名称" style="width:100%;"  maxlength="15">
+				<span class="editItemInMax">{{menueName.length}} / {{menueNameMax}}</span>
+			</div>    
+		</div>    
+		<div class="panel-body form-horizontal" style="padding-right: 30px;" data-ng-show="addlevel == 2 && weatherCreate">
+			<div class="editItemBox">
+				<lable>所属层级</lable>
+				<div class="editItem">
+					<select data-ng-model="pmenueId" id="pmenueId" ng-change="changepMenue(pmenueId)"  style="border: 1px solid #ccc;width:100%;padding: 5px;border-radius: 5px;" >
+					  	  <option ng-repeat="x in docIndex_List"  ng-selected="x.menueId == pmenueId" ng-value="x.menueId">{{x.menueName}}</option>
+					</select>
+				</div>  
+			</div>
+			<div class="editItemBox"> 
+				<lable>{{title}}级名称</lable>
+				<div class="editItem"  data-ng-repeat="Item in menueNameSInit" style="margin-bottom: 5px;">
+					<input type="text" id="menueName{{$index + 1}}" class="menueName" ng-class="{isExit : locaNum == $index && nameSetting }" data-num="{{$index}}" data-ng-model="Item.menueName" placeholder="请输入菜单名称" onfocusout = "checkName(this)"   maxlength="15">
+					<span class="editItemInMax" style="right:8%;">{{Item.menueName.length}} / {{menueNameMax}}</span>
+					
+					<button type="button" class="add_button"  data-ng-show="Item.menueName.length > 0 && $index == menueNameSInit.length - 1" ng-click="addEditItem()">
+							<img data-ng-src="images/common/add.png" src="images/common/add.png" class="">
+					</button>
+					
+					<button type="button" class="add_button" style="background:#f17878;"  data-ng-show="$index != menueNameSInit.length - 1" ng-click="delEditItem($index)">
+							<img data-ng-src="images/common/close16.png" src="images/common/close16.png" class="">
+					</button>
+				</div> 
+			</div>
+		</div>     
+   	</div>   	
+   	<!--右上角关闭按钮 -->
+   	
+    
+    <!--确定取消按钮-->
+    <div class="panel-footer" style="height: 55px;background: #fff;border: none;">
+        <div style="text-align: right;">
+           	<button class="btn btn-primary" ng-click="save()" ng-disabled="addlevel == 2 && nameSetting">保存</button>&nbsp;
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+</div>
+

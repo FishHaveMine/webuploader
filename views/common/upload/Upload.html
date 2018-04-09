@@ -1,0 +1,23 @@
+<div class="upload-container">
+    <!--用来存放文件信息-->
+    <div ng-if="files.length > 0" class="js-uploader-list">
+        <table class="table table-striped">
+            <tr ng-repeat="file in files track by file.id"
+                ng-class="{ success: file.getStatus() === 'complete', danger: file.getStatus() === 'error', warning: file.getStatus() === 'interrupt' }">
+                <td class="hide"></td>
+                <td class="col-md-5 text-left">{{ file.name }}</td>
+                <td class="col-md-2 text-left">{{ file.size | byte }}</td>
+                <td class="col-md-5">
+                    <div ng-class="{ active: file.getStatus() === 'progress' }" class="progress progress-striped">
+                        <div class="progress-bar" ng-style="progressStylies[file.id]"></div>
+                    </div>
+                </td>
+                <td class="cs-btn-cell"><a href ng-click="remove(file, $index)" class="close">&times;</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="upload-dnd-container js-dnd-container">
+        <div class="js-btn-pick">选择文件</div>
+        <div class="upload-dnd-info js-dnd-info">或将文件拖到虚线框内</div>
+    </div>
+</div>
